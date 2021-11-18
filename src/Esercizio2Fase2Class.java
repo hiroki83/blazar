@@ -1,9 +1,6 @@
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class Esercizio2Fase2Class {
     public static void main(String[] args) {
@@ -12,14 +9,52 @@ public class Esercizio2Fase2Class {
         List<Poligoni> poligoni = new ArrayList<>();
         poligoni.addAll(fase1.getRettangli());
         poligoni.addAll(fase2.getQuadrati());
+
+        List<Poligoni> poligoniSorted = fase2.getFirst10DaysPoligoni(poligoni);
+
+
+
     }
 
-    public List<Quadrati> getFirst10DaysQuadrati(List<Quadrati> quadrati) {
-        List<Quadrati> rtn = new ArrayList<>();
-        Collections.sort(quadrati, Comparator.comparing(Quadrati::getBirthDay));
-        LocalDate firstDay = quadrati.get(0).getBirthDay();
+    public void showPoligoni(List<Poligoni> poligoniSorted) {
+        List<Poligoni> rettangli = getNewPoligoni(poligoniSorted);
+        for (Poligoni r : rettangli) {
+            System.out.println("giorno di nascita: " + r.getBirthDay() + ", base: " + r.getBase() + ", altezza: " + r.getHeight() + ", area: " + r.getArea());
+        }
+    }
+
+    public Map<Long, List<Poligoni>> getGroupByDay(List<Poligoni> poligoniSorted) {
+        Map<Long, List<Poligoni>> poligoniGroupedByDay = new HashMap<>();
+        for (Poligoni p : poligoniSorted) {
+        }
+        return poligoniGroupedByDay;
+    }
+
+    public List<Poligoni> getNewPoligoni(List<Poligoni> poligoniSorted) {
+        List<Poligoni> rtn = new ArrayList<>();
+        double sumBaseRettangoli = 0.0;
+        double sumHeightRettangoli = 0.0;
+        double sumBaseQuadrati = 0.0;
+        double sumHeightQuadrati = 0.0;
+        for (int i = 0; i < poligoniSorted.size(); i++) {
+            Poligoni p = poligoniSorted.get(i);
+            if (poligoniSorted.get(i) instanceof Rettangli) {
+                sumBaseRettangoli += p.getBase();
+                sumHeightRettangoli += p.getHeight();
+            } else if (poligoniSorted.get(i) instanceof Quadrati) {
+                sumBaseQuadrati += p.getBase();
+                sumHeightQuadrati += p.getHeight();
+            }
+        }
+        return rtn;
+    }
+
+    public List<Poligoni> getFirst10DaysPoligoni(List<Poligoni> poligoni) {
+        List<Poligoni> rtn = new ArrayList<>();
+        Collections.sort(poligoni, Comparator.comparing(Poligoni::getBirthDay));
+        LocalDate firstDay = poligoni.get(0).getBirthDay();
         LocalDate stopDay = firstDay.plusDays(9);
-        for (Quadrati r : quadrati) {
+        for (Poligoni r : poligoni) {
             if (r.getBirthDay().isAfter(stopDay))
                 break;
             rtn.add(r);
